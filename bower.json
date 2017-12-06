@@ -1,0 +1,19 @@
+{
+  "name": "demo",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "dependencies": {
+    "purescript-presto": "^0.2.2",
+    "purescript-foreign-generic": "^5.0.0"
+  },
+  "devDependencies": {
+    "purescript-psci-support": "^3.0.0"
+  },
+  "resolutions": {
+   "purescript-foreign-generic": "^5.0.0"
+}
+}
