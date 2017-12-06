@@ -1,13 +1,9 @@
 module Types where
 
-import Prelude
-
 import Control.Monad.Eff.Exception (Error)
-import Data.Either (Either(..), either)
 import Data.Foreign.Class (class Decode, class Encode)
 import Data.Generic.Rep (class Generic)
-import Presto.Core.Types.API (class RestEndpoint, Headers(Headers), Method(GET), defaultDecodeResponse, defaultMakeRequest_)
-import Presto.Core.Types.Language.Flow (APIResult, Flow, callAPI)
+import Presto.Core.Types.API (class RestEndpoint, Method(GET), defaultDecodeResponse, defaultMakeRequest_)
 import Presto.Core.Types.Language.Interaction (class Interact, defaultInteract)
 import Presto.Core.Utils.Encoding (defaultDecode, defaultEncode)
 
@@ -42,12 +38,6 @@ instance decodeMainScreenAction :: Decode MainScreenAction where
   decode = defaultDecode
 
 -----------------------------------API------------------------------------------
-withAPIResult :: forall a b. (a -> b) -> Flow (APIResult a) -> Flow (APIResult b)
-withAPIResult f flow = flow >>= either (pure <<< Left) (pure <<< Right <<< f)
-
-getTime :: Flow (APIResult String)
-getTime = withAPIResult unwrapResponse (callAPI (Headers []) $ TimeReq)
-  where unwrapResponse (TimeResp {response}) = response
 
 data TimeReq = TimeReq
 newtype TimeResp = TimeResp

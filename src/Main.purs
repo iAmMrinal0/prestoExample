@@ -11,7 +11,8 @@ import Data.Tuple (Tuple(..))
 import Presto.Core.Flow (APIRunner, PermissionCheckRunner, PermissionRunner(PermissionRunner), PermissionTakeRunner, runUI)
 import Presto.Core.Language.Runtime.Interpreter (Runtime(..), UIRunner, run)
 import Presto.Core.Types.Permission (PermissionStatus(..))
-import Types (MainScreen(..), MainScreenAction(..), MainScreenState(..), getTime)
+import Remote as API
+import Types (MainScreen(..), MainScreenAction(..), MainScreenState(..))
 import Utils.Runner (mkNativeRequest, showUI', callAPI')
 
 launchFreeFlow = do
@@ -35,7 +36,7 @@ appFlow state = do
   action <- runUI (MainScreen state)
   case action of
     AddToDo str -> do
-      resp <- getTime
+      resp <- API.getTime
       case resp of
         Left err -> appFlow (MainScreenInit)
         Right scc -> appFlow (MainScreenAddToDo str scc)

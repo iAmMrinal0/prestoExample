@@ -8,8 +8,7 @@ import Presto.Core.Types.API (Request(..), URL)
 import Presto.Core.Types.App (UI)
 
 newtype NativeRequest = NativeRequest
-  {
-    method :: String
+  { method :: String
   , url :: URL
   }
 
@@ -21,7 +20,6 @@ foreign import callAPI' :: forall e. (AffError e) -> (AffSuccess String e) -> Na
 
 mkNativeRequest :: Request -> NativeRequest
 mkNativeRequest (Request request) = NativeRequest
-                                          {
-                                              method : show request.method
-                                            , url: request.url
-                                          }
+  { method : show request.method
+  , url: request.url
+  }
