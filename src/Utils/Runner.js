@@ -12,14 +12,25 @@ exports["showUI'"] = function(sc) {
 var callAPIImpl = function(success, err, method, url) {
     fetch(url, {mode : 'cors'})
     .then(function(res) {
-      if(res.ok == false)
+      if(res.ok == false) {
+        return Promise.reject(res)
         throw new Error("Failed to Fetch from URL");
-      return res.text()})
+      } else {
+        return res.text()
+      }
+    })
     .then(function(resp){
         success(JSON.stringify(resp))();
     }).catch(function(err){
-      console.error("Error in Fetch ", err);
-      success(JSON.stringify({status:"failure"}))();
+      console.log(err);
+      success(JSON.stringify({ code: err.status,
+                               status: err.statusText,
+                               response: { error: true,
+                                           userMessage: 'Request Failed',
+                                           errorMessage: err.statusText
+                                         }
+                             })
+             )();
     })
 };
 

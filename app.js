@@ -7,6 +7,9 @@ const handleScreenAction = (state) => {
     case "MainScreenDeleteTodo":
       removeChild(state.contents);
       break;
+    case "MainScreenError":
+      console.log('This is the error: ', state.contents)
+      break
     default: console.log("Invalid Tag Passed: ", state.tag);
   }
 }

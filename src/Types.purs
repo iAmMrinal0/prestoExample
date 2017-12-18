@@ -14,6 +14,7 @@ data MainScreenState
   = MainScreenInit
   | MainScreenAddTodo String String
   | MainScreenDeleteTodo String
+  | MainScreenError String
 
 data MainScreenAction
   = AddTodo String

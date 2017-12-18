@@ -13,7 +13,7 @@ import Presto.Core.Language.Runtime.Interpreter (Runtime(..), UIRunner, run)
 import Presto.Core.Types.API (Headers(..))
 import Presto.Core.Types.Permission (PermissionStatus(..))
 import Types (MainScreen(..), MainScreenAction(..), MainScreenState(..), TimeReq(..), TimeResp(..))
-import Utils.Runner (mkNativeRequest, showUI', callAPI')
+import Utils.Runner (callAPI', mkNativeRequest, showUI')
 
 launchFreeFlow = do
   let runtime = Runtime uiRunner (PermissionRunner permissionCheckRunner permissionTakeRunner) apiRunner
@@ -43,5 +43,5 @@ appFlow state = do
 addTodoFlow str = do
   resp <- callAPI (Headers []) TimeReq
   case resp of
-    Left err -> appFlow MainScreenInit
+    Left err -> appFlow (MainScreenError (show err))
     Right (TimeResp scc) -> appFlow (MainScreenAddTodo str scc)
