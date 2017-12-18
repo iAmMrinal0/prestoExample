@@ -16,11 +16,7 @@ var callAPIImpl = function(success, err, method, url) {
         throw new Error("Failed to Fetch from URL");
       return res.text()})
     .then(function(resp){
-        success(JSON.stringify({
-            status:"success"
-          , response: resp
-          , code:200})
-        )();
+        success(JSON.stringify(resp))();
     }).catch(function(err){
       console.error("Error in Fetch ", err);
       success(JSON.stringify({status:"failure"}))();

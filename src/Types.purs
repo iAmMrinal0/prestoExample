@@ -8,30 +8,27 @@ import Presto.Core.Types.Language.Interaction (class Interact, defaultInteract)
 import Presto.Core.Utils.Encoding (defaultDecode, defaultEncode)
 
 ---------------------------------SCREEN-----------------------------------------
-type ToDo = String
-type ID = String
-
 data MainScreen = MainScreen MainScreenState
 
 data MainScreenState
   = MainScreenInit
-  | MainScreenAddToDo ToDo String
-  | MainScreenDeleteToDo ID
+  | MainScreenAddTodo String String
+  | MainScreenDeleteTodo String
 
 data MainScreenAction
-  = AddToDo ToDo
-  | RemoveTodo ID
+  = AddTodo String
+  | RemoveTodo String
 
 instance mainScreenInteract :: Interact Error MainScreen MainScreenAction  where
-    interact x = defaultInteract x
+  interact x = defaultInteract x
 
 derive instance genericMainScreen :: Generic MainScreen _
 instance encodeMainScreen :: Encode MainScreen where
-    encode = defaultEncode
+  encode = defaultEncode
 
 derive instance genericMainScreenState :: Generic MainScreenState _
 instance encodeMainScreenState :: Encode MainScreenState where
-    encode = defaultEncode
+  encode = defaultEncode
 
 derive instance genericMainScreenAction :: Generic MainScreenAction _
 instance decodeMainScreenAction :: Decode MainScreenAction where
@@ -40,18 +37,16 @@ instance decodeMainScreenAction :: Decode MainScreenAction where
 -----------------------------------API------------------------------------------
 
 data TimeReq = TimeReq
-newtype TimeResp = TimeResp
-  { code :: Int
-  , status :: String
-  , response :: String
-  }
+data TimeResp = TimeResp String
 
 instance getTimeReq :: RestEndpoint TimeReq TimeResp where
-  makeRequest _ headers = defaultMakeRequest_ GET ("http://localhost:3000") headers
+  makeRequest _ headers = defaultMakeRequest_ GET "http://localhost:3000" headers
   decodeResponse body = defaultDecodeResponse body
 
 derive instance genericTimeReq :: Generic TimeReq _
-instance encodeTimeReq :: Encode TimeReq where encode = defaultEncode
+instance encodeTimeReq :: Encode TimeReq where
+  encode = defaultEncode
 
 derive instance genericTimeResp :: Generic TimeResp _
-instance decodeTimeResp :: Decode TimeResp where decode = defaultDecode
+instance decodeTimeResp :: Decode TimeResp where
+  decode = defaultDecode

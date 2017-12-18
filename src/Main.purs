@@ -8,11 +8,11 @@ import Control.Monad.State.Trans (evalStateT)
 import Data.Either (Either(..))
 import Data.StrMap (empty)
 import Data.Tuple (Tuple(..))
-import Presto.Core.Flow (APIRunner, PermissionCheckRunner, PermissionRunner(PermissionRunner), PermissionTakeRunner, runUI)
+import Presto.Core.Flow (APIRunner, PermissionCheckRunner, PermissionRunner(PermissionRunner), PermissionTakeRunner, callAPI, runUI)
 import Presto.Core.Language.Runtime.Interpreter (Runtime(..), UIRunner, run)
+import Presto.Core.Types.API (Headers(..))
 import Presto.Core.Types.Permission (PermissionStatus(..))
-import Remote as API
-import Types (MainScreen(..), MainScreenAction(..), MainScreenState(..))
+import Types (MainScreen(..), MainScreenAction(..), MainScreenState(..), TimeReq(..), TimeResp(..))
 import Utils.Runner (mkNativeRequest, showUI', callAPI')
 
 launchFreeFlow = do
@@ -32,14 +32,16 @@ launchFreeFlow = do
     permissionTakeRunner :: PermissionTakeRunner
     permissionTakeRunner perms =  pure $ map (\x -> Tuple x PermissionDeclined) perms
 
+main = launchFreeFlow
+
 appFlow state = do
   action <- runUI (MainScreen state)
   case action of
-    AddToDo str -> do
-      resp <- API.getTime
-      case resp of
-        Left err -> appFlow (MainScreenInit)
-        Right scc -> appFlow (MainScreenAddToDo str scc)
-    RemoveTodo id -> appFlow (MainScreenDeleteToDo id)
+    AddTodo str -> addTodoFlow str
+    RemoveTodo id -> appFlow (MainScreenDeleteTodo id)
 
-main = launchFreeFlow
+addTodoFlow str = do
+  resp <- callAPI (Headers []) TimeReq
+  case resp of
+    Left err -> appFlow MainScreenInit
+    Right (TimeResp scc) -> appFlow (MainScreenAddTodo str scc)

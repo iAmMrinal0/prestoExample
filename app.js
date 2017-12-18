@@ -1,14 +1,13 @@
 const handleScreenAction = (state) => {
   switch (state.tag) {
     case "MainScreenInit": initApp();break;
-    case "MainScreenAddToDo":
+    case "MainScreenAddTodo":
       appendChild(state.contents);
       break;
-    case "MainScreenDeleteToDo":
+    case "MainScreenDeleteTodo":
       removeChild(state.contents);
       break;
     default: console.log("Invalid Tag Passed: ", state.tag);
-
   }
 }
 
@@ -28,7 +27,7 @@ const initApp = () => {
 
 const addTodoClick = () => {
   var todo = document.getElementById("ADD_TODO").value;
-  var event = { tag:"AddToDo",
+  var event = { tag:"AddTodo",
                 contents:todo
               };
   window.callBack(JSON.stringify(event))();
@@ -47,11 +46,11 @@ const appendChild = (val) => {
 
     button.appendChild(document.createTextNode("Delete"))
     button.addEventListener("click", function() {
-        var event = {
-            tag: "RemoveTodo",
-            contents: "todoid" + date
-        }
-        window.callBack(JSON.stringify(event))()})
+      var event = { tag: "RemoveTodo",
+                    contents: "todoid" + date
+                  }
+      window.callBack(JSON.stringify(event))()
+    })
     buttonSpan.appendChild(button)
 
     p.appendChild(document.createTextNode(text))
