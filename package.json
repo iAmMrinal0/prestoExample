@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "build": "pulp build --to index.js",
     "watch:purs": "pulp --watch build --to index.js"
   },
   "author": "",
