@@ -7,6 +7,12 @@ const handleScreenAction = (state) => {
     case "MainScreenDeleteTodo":
       removeChild(state.contents);
       break;
+    case "MainScreenEditTodo":
+      editTodo(state.contents)
+      break;
+    case "MainScreenUpdateTodo":
+      updateTodo(state.contents)
+      break;
     case "MainScreenError":
       console.log('This is the error: ', state.contents)
       break
@@ -39,30 +45,10 @@ const addTodoClick = () => {
 const appendChild = (val) => {
     var todolist = document.getElementById("todolist")
     var div = document.createElement("div")
-    var titleSpan = document.createElement("span")
-    var buttonSpan = document.createElement("span")
-    var p = document.createElement("p")
-    var button = document.createElement("button")
 
-    var date = val[1]
-    var text = val[0]
-
-    button.appendChild(document.createTextNode("Delete"))
-    button.addEventListener("click", function() {
-      var event = { tag: "RemoveTodo",
-                    contents: "todoid" + date
-                  }
-      window.callBack(JSON.stringify(event))()
-    })
-    buttonSpan.appendChild(button)
-
-    p.appendChild(document.createTextNode(text))
-    titleSpan.appendChild(p)
-
-    div.setAttribute("id","todoid"+date)
-    div.appendChild(titleSpan)
-    div.appendChild(buttonSpan)
-
+    val[1] = 'todoid' + val[1]
+    div.setAttribute("id", val[1])
+    div = updateView(div, val)
     todolist.appendChild(div)
 }
 
@@ -70,6 +56,60 @@ const removeChild = (id) => {
     var todolist = document.getElementById("todolist");
     var elem = document.getElementById(id);
     todolist.removeChild(elem);
+}
+
+const editTodo = todo => {
+  var todoElem = document.getElementById(todo)
+  var todoVal = todoElem.getElementsByTagName('p')[0].innerHTML
+  todoElem.innerHTML = '<br/><input type="text" placeholder="' + todoVal + '" id="UPDATE_TODO" />'
+  var button = document.createElement("button")
+
+  button.appendChild(document.createTextNode("Update"))
+  button.addEventListener("click", function() {
+    var val = document.getElementById('UPDATE_TODO').value
+    var event = { tag: "UpdateTodo",
+                  contents: [val, todo]
+                }
+    window.callBack(JSON.stringify(event))()
+  })
+  todoElem.appendChild(button)
+  console.log('This is the todo id: ', todo)
+}
+
+const updateTodo = data => {
+  var [value, id] = data
+  var updatedElem = document.getElementById(id)
+  updatedElem.innerHTML = ''
+  updateView(updatedElem, data)
+}
+
+const updateView = (div, data) => {
+  var p = document.createElement("p")
+  var button = document.createElement("button")
+  var [text, id] = data
+  p.appendChild(document.createTextNode(text))
+  div.appendChild(p)
+
+  button.appendChild(document.createTextNode("Delete"))
+  button.addEventListener("click", function() {
+    var event = { tag: "RemoveTodo",
+                  contents: id
+                }
+    window.callBack(JSON.stringify(event))()
+  })
+  div.appendChild(button)
+
+  var button2 = document.createElement("button")
+
+  button2.appendChild(document.createTextNode("Edit"))
+  button2.addEventListener("click", function() {
+    var event = { tag: "EditTodo",
+                  contents: id
+                }
+    window.callBack(JSON.stringify(event))()
+  })
+  div.appendChild(button2)
+  return div
 }
 
 window.showScreen = function (callBack, data) {

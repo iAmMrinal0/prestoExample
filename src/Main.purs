@@ -10,7 +10,7 @@ import Data.StrMap (empty)
 import Data.Tuple (Tuple(..))
 import Presto.Core.Flow (APIRunner, PermissionCheckRunner, PermissionRunner(PermissionRunner), PermissionTakeRunner, callAPI, runUI)
 import Presto.Core.Language.Runtime.Interpreter (Runtime(..), UIRunner, run)
-import Presto.Core.Types.API (Headers(..))
+import Presto.Core.Types.API (Headers(Headers))
 import Presto.Core.Types.Permission (PermissionStatus(..))
 import Types (MainScreen(..), MainScreenAction(..), MainScreenState(..), TimeReq(..), TimeResp(..))
 import Utils.Runner (callAPI', mkNativeRequest, showUI')
@@ -39,6 +39,8 @@ appFlow state = do
   case action of
     AddTodo str -> addTodoFlow str
     RemoveTodo id -> appFlow (MainScreenDeleteTodo id)
+    EditTodo id -> appFlow (MainScreenEditTodo id)
+    UpdateTodo str id -> appFlow (MainScreenUpdateTodo str id)
 
 addTodoFlow str = do
   resp <- callAPI (Headers []) TimeReq

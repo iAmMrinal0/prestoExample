@@ -14,11 +14,15 @@ data MainScreenState
   = MainScreenInit
   | MainScreenAddTodo String String
   | MainScreenDeleteTodo String
+  | MainScreenEditTodo String
+  | MainScreenUpdateTodo String String
   | MainScreenError String
 
 data MainScreenAction
   = AddTodo String
   | RemoveTodo String
+  | EditTodo String
+  | UpdateTodo String String
 
 instance mainScreenInteract :: Interact Error MainScreen MainScreenAction  where
   interact x = defaultInteract x
