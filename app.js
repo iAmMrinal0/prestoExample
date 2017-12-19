@@ -115,3 +115,14 @@ window.showScreen = function (callBack, data) {
     window.callBack = callBack;
     handleScreenAction(data);
 };
+
+const JBridge = {}
+
+JBridge.getFromSharedPrefs = function(key) {
+  return localStorage.getItem(key) || "__failed";
+}
+
+JBridge.setInSharedPrefs = function(key, value) {
+  localStorage.setItem(key, value);
+  return "success"
+}

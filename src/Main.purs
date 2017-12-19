@@ -11,6 +11,7 @@ import Data.Tuple (Tuple(..))
 import Presto.Core.Flow (APIRunner, PermissionCheckRunner, PermissionRunner(PermissionRunner), PermissionTakeRunner, callAPI, runUI)
 import Presto.Core.Language.Runtime.Interpreter (Runtime(..), UIRunner, run)
 import Presto.Core.Types.API (Header(..), Headers(Headers))
+import Presto.Core.Types.Language.Flow (saveS)
 import Presto.Core.Types.Permission (PermissionStatus(..))
 import Types (MainScreen(..), MainScreenAction(..), MainScreenState(..), TimeReq(..), TimeResp(..), UpdateReq(..), UpdateRes(..))
 import Utils.Runner (callAPI', mkNativeRequest, showUI')
@@ -52,4 +53,6 @@ updateTodoFlow str id = do
   resp <- callAPI (Headers [Header "Content-Type" "application/json"]) (UpdateReq str id)
   case resp of
     Left err -> appFlow (MainScreenError (show err))
-    Right (UpdateRes {response: str}) -> appFlow (MainScreenUpdateTodo str)
+    Right (UpdateRes {response: result}) -> do
+      saveS "data" str
+      appFlow (MainScreenUpdateTodo result)
