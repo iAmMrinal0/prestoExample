@@ -2,10 +2,10 @@ const handleScreenAction = (state) => {
   switch (state.tag) {
     case "MainScreenInit": initApp();break;
     case "MainScreenAddTodo":
-      appendChild(state.contents);
+      addTodo(state.contents);
       break;
     case "MainScreenDeleteTodo":
-      removeChild(state.contents);
+      deleteTodo(state.contents);
       break;
     case "MainScreenEditTodo":
       editTodo(state.contents)
@@ -42,7 +42,7 @@ const addTodoClick = () => {
   window.callBack(JSON.stringify(event))();
 }
 
-const appendChild = (val) => {
+const addTodo = (val) => {
     var todolist = document.getElementById("todolist")
     var div = document.createElement("div")
 
@@ -52,7 +52,7 @@ const appendChild = (val) => {
     todolist.appendChild(div)
 }
 
-const removeChild = (id) => {
+const deleteTodo = (id) => {
     var todolist = document.getElementById("todolist");
     var elem = document.getElementById(id);
     todolist.removeChild(elem);
@@ -73,7 +73,6 @@ const editTodo = todo => {
     window.callBack(JSON.stringify(event))()
   })
   todoElem.appendChild(button)
-  console.log('This is the todo id: ', todo)
 }
 
 const updateTodo = data => {

@@ -1,10 +1,21 @@
 const express = require('express')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const app = express()
 app.use(cors())
-app.get('/', (req, res) =>{
+app.use(bodyParser.json())
+
+app.get('/time', (req, res) => {
   var date = new Date().toISOString()
-  res.send(date)
+  res.send(JSON.stringify(date))
+})
+
+app.post('/update', (req, res) => {
+  res.send(req.body)
+})
+
+app.get('/error', (req, res) => {
+  res.sendStatus(500)
 })
 
 app.listen(3000, (err) => {
